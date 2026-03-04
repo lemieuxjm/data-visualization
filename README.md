@@ -1,2 +1,2 @@
 # data-visualization
-New location of MSDS Data Visualization project
+Updated location of MSDS Data Visualization project
