@@ -1,0 +1,170 @@
+---
+title: "Data Due Diligence Project"
+author: "June Lemieux"
+date: '`r Sys.Date()`'
+output: pdf_document
+---
+```{r} 
+library(tidyverse)
+library(ggplot2)
+library(lubridate)
+
+# import data
+df <- read_csv(".\\Customer_Dataset_Data.csv")
+
+# change Internet values that are not Y nor N to Y
+df <- df %>% mutate(Internet = recode(Internet, '4'='Yes', '2'='Yes', '3'='Yes'))
+
+# remove the 15th column as it contains no column name nor data
+df <- df %>% select(-15)
+
+# change NA CommuteTimes, TownSize to zero
+df <- df %>% mutate(CommuteTime = ifelse(is.na(CommuteTime), 0, CommuteTime),
+                    TownSize = ifelse(is.na(TownSize), 1, TownSize))
+
+# change CarOwnership from -1 to NoCar, CarBrand from -1 to NoCar, CarValue from -1k to 1
+df <- df %>% mutate(CarOwnership = recode(CarOwnership, '-1'='NoCar'))
+df <- df %>% mutate(CarBrand = recode(CarBrand, '-1'='NoCar'))
+df <- df %>% mutate(CarValue = recode(CarValue, '$ (1,000.00)' = '$ 1.00'))
+
+# change data type of monetary columns from chr to num (remove $ and , as part of this)
+df <- df %>% mutate(HHIncome = as.numeric(gsub('[$,]', "", HHIncome)),
+                    CarValue = as.numeric(gsub('[$,]', "", CarValue)),
+                    CardSpendMonth = as.numeric(gsub('[$,]', "", CardSpendMonth)),
+                    VoiceLastMonth = as.numeric(gsub('[$,]', "", VoiceLastMonth)),					
+                    VoiceOverTenure = as.numeric(gsub('[$,]', "", VoiceOverTenure)),
+                    EquipmentLastMonth = as.numeric(gsub('[$,]', "", EquipmentLastMonth)),
+                    EquipmentOverTenure = as.numeric(gsub('[$,]', "", EquipmentOverTenure)),
+                    DataLastMonth = as.numeric(gsub('[$,]', "", DataLastMonth)),					
+                    DataOverTenure = as.numeric(gsub('[$,]', "", DataOverTenure)))
+
+# Create TotalTelecomLastMonth and TotTelecomOverTenure variable
+df$VoiceLastMonth[is.na(df$VoiceLastMonth)] <- 0
+df$EquipmentLastMonth[is.na(df$EquipmentLastMonth)] <- 0
+df$DataLastMonth[is.na(df$DataLastMonth)] <- 0
+df$VoiceOverTenure[is.na(df$VoiceOverTenure)] <- 0
+df$EquipmentOverTenure[is.na(df$EquipmentOverTenure)] <- 0
+df$DataOverTenure[is.na(df$DataOverTenure)] <- 0
+
+df <- df %>% mutate(TotTelecomLastMonth = (VoiceLastMonth + EquipmentLastMonth + DataLastMonth),
+                    TotTelecomOverTenure = (VoiceOverTenure + EquipmentOverTenure + DataOverTenure))
+
+# Create a TotalDebt variable using CreditDebt + OtherDebt
+df <- df %>% mutate(TotalDebt = (CreditDebt + OtherDebt))
+
+# Create a DTICategory variable using ranges in DebtToIncomeRatio 
+df <- df %>% mutate(DTICategory = case_when(DebtToIncomeRatio <= 35 ~ "good",
+								                        DebtToIncomeRatio > 49 ~ "limited",
+								                        TRUE ~ "adequate"))
+
+# Create a OfferingCount variable by counting the number of offerings used per customer
+# Need to start by renaming the variables within the offerings category to end with '_ts'
+# This facilitates the c_across operation
+# Add 1 to every row because VoiceLastMonth for everyone is > 0, but is not Y/N
+
+df <- rename(df, 
+    CallerID_ts = CallerID, 
+		CallForward_ts = CallForward,
+		CallingCard_ts = CallingCard,
+		CallWait_ts = CallWait,
+		EquipmentRental_ts = EquipmentRental,
+		Internet_ts = Internet,
+		Multiline_ts = Multiline,
+		NewsSubscriber_ts = NewsSubscriber,
+		Pager_ts = Pager,
+		ThreeWayCalling_ts = ThreeWayCalling,
+		VM_ts = VM,
+		WirelessData_ts = WirelessData)
+
+df <- df %>% rowwise %>%
+  mutate(OfferingCount = sum(c_across(ends_with('_ts')) == "Yes") + 1 ) %>%
+  ungroup
+
+# Create HHIncGroup variable to identify HHIncome groupings (randomly set at 50K intervals)
+df <- df %>% mutate(HHIncGroup = case_when(HHIncome >= 0  & HHIncome <= 50000 ~ 'A',
+                       HHIncome > 50000  & HHIncome <= 100000 ~ 'B',
+                       HHIncome > 100000  & HHIncome <= 150000 ~ 'C',
+											 HHIncome > 150000  & HHIncome <= 200000 ~ 'D',
+											 HHIncome > 200000  & HHIncome <= 250000 ~ 'E',
+											 HHIncome > 250000 ~ 'F')
+											 )
+
+write.csv(df, ".\\Customer_Dataset_Data_Revised.csv", row.names = FALSE)
+
+```
+
+```{r}
+# Histograms
+
+# Age
+ggplot(df,
+        mapping=aes(x=Age)
+ ) + geom_histogram()
+
+# Geography
+ggplot(df,
+        mapping=aes(x=TownSize)
+ ) + geom_histogram()
+
+ggplot(df,
+        mapping=aes(x=Region)
+ ) + geom_histogram()
+
+# HHIncome
+ggplot(df,
+       mapping=aes(x=HHIncome)
+) + geom_histogram() + scale_x_continuous(limits = c(0, 250000), labels = scales::label_comma())
+
+# OfferingCount
+ggplot(df,
+        mapping=aes(x=OfferingCount)
+ ) + geom_histogram()
+```
+
+```{r}
+# Bar Plots
+
+# Count of Region and JobCategory - all equal
+ggplot(df,
+       mapping=aes(x=Region, fill=JobCategory)
+) + geom_bar()
+
+# Count of DebtToIncome Categorization - nothing interesting here
+ggplot(df,
+      mapping=aes(x=DTICategory)
+) + geom_bar()
+
+# OfferingCount
+ggplot(df,
+        mapping=aes(x=OfferingCount)
+ ) + geom_bar()
+
+# HHIncGroup
+ggplot(df,
+        mapping=aes(x=HHIncGroup)
+) + geom_bar()
+
+# Count of OfferingCount and HHIncGroup - interesting!  Try percent?
+ggplot(df,
+       mapping=aes(x=OfferingCount, fill=HHIncGroup)
+) + geom_bar()
+
+
+# Attempting scatterplots
+
+ggplot(df, aes(CardSpendMonth, TotTelecomLastMonth, color=HHIncGroup)
+       ) + geom_point() 
+
+ggplot(df, aes(CardSpendMonth, TotTelecomLastMonth, color=Region)
+       ) + geom_point() 
+
+ggplot(df, aes(HouseholdSize, NumberPets)
+       ) + geom_point() 
+
+
+# Attempting boxplots
+ggplot(df, aes(HouseholdSize, NumberPets)
+       ) + geom_boxplot() 
+
+```
+

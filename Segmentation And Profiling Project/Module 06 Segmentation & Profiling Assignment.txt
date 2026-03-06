@@ -1,0 +1,34 @@
+Module 06: Segmentation & Profiling Project Instructions
+Instructions
+Keeping the earlier overall description of the Segmentation & Profiling Project, your task is to continue to analyze the Customer Database dataset (Customer_Dataset_Data.csv) used earlier in the Data Due Diligence Project). As before, assume that you are a marketing analytics manager for a telecommunications company and that you have been tasked with developing customer segmentation that can support effective, and economically sound, customer retention efforts. To accomplish that goal, you need to take the following data analytical steps:
+
+Carefully review all available data (i.e., the contents of Customer Database), paying particular attention to distinct data types (e.g., product purchases, demographics, etc.), and identify specific variables you would like to use as the basis of your segmentation analysis – make sure to also consider any new variables or indicators you might have previously (Data Due Diligence Project) created, or consider creating new variables now it is important to be able to justify your choice(s)
+Review the available clustering techniques and select two (2) distinct techniques – justify your choices (i.e., why those techniques and not others)
+Segment your customer base using the two techniques you selected (above)
+Evaluate the practical efficacy of your segmentation solutions – conduct side-by-side comparison of the two sets of results, and select the solution that you would recommend being used; make sure to clearly justify your reasoning
+Using the solution, you chose above, group all customers into the created segments
+Provide a detailed overview (i.e., the number of segments, cross-segment differences, segment- specific profiles, etc.) of the selected segmentation results, expressly differentiating between ‘high’ and ‘low’ retention segments; make sure to provide sound justification for why you consider some segments to be ‘high retention’ while others to be ‘low retention’.
+You may use R to perform the segmentation work, but Tableau must be used to create visualizations.
+
+Deliverables
+Content-wise, your report needs to include the following elements:
+
+An executive summary: 2-3-page summary of your key findings and recommendations at the front of your report
+A detailed technical report including:
+Description of the methodology you used to create and select the specific segmentation solution.
+Detailed findings (i.e., detailed customer profiles of individual segments)
+Depictions of the individual customer segments/profiles created in Tableau 
+Appendix: Any additional details that you found worthwhile but did not include in other sections.
+Format-wise, your report needs to be structured as follows:
+
+Length: No more than 10 single-spaced pages (excluding any appendices)
+Use Times New Roman, 12-pt font throughout.
+Use clear headings, as appropriate.
+Small blocks of code can be included in the appendix if they improve clarity. Do not include large blocks of code in your report
+Output tables should be cleanly formatted and easy to read. Do not copy and paste directly from console output.
+Plots from Tableau can be added to the report through screenshots or image exports. 
+Format: MS Word. 
+Upload your file to Canvas on or before 11:59 pm ET on Friday, the last day of the class.
+
+Add your file by selecting "Upload" or by dragging and dropping the file.
+Select "Submit Assignment" to turn in your assignment.
