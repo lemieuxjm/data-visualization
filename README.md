@@ -23,32 +23,34 @@ These two complementary projects provide a comprehensive framework for understan
 data-visualization/
 ├── Due Diligence Project/
 │   ├── code/
-│   │   └── DueDiligenceStudy.Rmd              # Data quality and preparation analysis
+│   │   └── DueDiligenceStudy.Rmd                 # Data quality and preparation analysis
 │   ├── data/
-│   │   ├── Customer_Dataset_Data.csv          # Raw customer dataset
-│   │   └── Customer_Dataset_Data_Revised.csv  # Cleaned and prepared dataset
+│   │   ├── Customer_Dataset_Data.csv             # Raw customer dataset
+│   │   └── Customer_Dataset_Data_Revised.csv     # Cleaned and prepared dataset
 │   ├── project instructions/
 │   │   ├── Instructions and Deliverables Information.docx
 │   │   └── Due Diligence Project Rubric.pdf
-│   └── reports/                               # Final deliverables
+│   └── reports/                                  # Final deliverables
+│       └── DSE5004_DueDiligence_JLemieux.pdf     # Final report
 │
 └── Segmentation And Profiling Project/
     ├── code/
     │   ├── R files/
-    │   │   ├── Segmentation.Rmd               # Initial segmentation analysis
-    │   │   └── Segmentation_v2.Rmd            # Refined segmentation with clustering
+    │   │   ├── Segmentation.Rmd                  # Initial segmentation analysis
+    │   │   └── Segmentation_v2.Rmd               # Refined segmentation with clustering
     │   └── Tableau files/
     │       ├── SegmentationProject1.twb
     │       ├── SegmentationProjectBoth.twb
     │       ├── SegmentationProjectKMeans.twb
     │       └── SegmentationProjectRules.twb
     ├── data/
-    │   ├── Customer_Dataset_Data_Revised.csv  # Input data from Due Diligence
-    │   └── output_of_segmentation.csv         # Segmentation results
-    ├── images/                                # Project visualizations
-    ├── reports/                               # Final deliverables
+    │   ├── Customer_Dataset_Data_Revised.csv     # Input data from Due Diligence
+    │   └── output_of_segmentation.csv            # Segmentation results
+    ├── images/                                   # Project visualizations
+    ├── reports/                                  # Final deliverables
+    │   ├── SegmentationProfiling_JMLemieux.docx
+    │   └── SegmentationProfiling_JMLemieux.pdf   # Final report
     └── Module 06 Segmentation & Profiling Assignment.txt
-
 
 ```
 
