@@ -1,4 +1,4 @@
-# Data Visualization & Analytics Projects
+# Visual Data Exploration & Analytics Projects
 
 This repository contains two integrated analytics projects focused on customer data analysis and segmentation for a telecommunications company.
 
